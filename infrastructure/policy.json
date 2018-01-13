@@ -47,7 +47,9 @@
         },
         "allowedServices": {
             "value": [
-                "Microsoft.MachineLearning/workspaces"
+                "Microsoft.MachineLearning/Workspaces",
+                "Microsoft.MachineLearning/commitmentPlans",
+                "Microsoft.Storage/storageAccounts"
             ]
         }
     }
