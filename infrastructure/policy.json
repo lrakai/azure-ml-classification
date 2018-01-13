@@ -1,0 +1,46 @@
+{
+    "parameters": {
+        "allowedServices": {
+            "type": "array",
+            "metadata": {
+                "description": "The list of allowed locations, and services",
+                "displayName": "Allowed services"
+            }
+        }
+    },
+    "displayName": "Allowed locations, and services",
+    "description": "This policy restrict the allowed locations, and services.",
+    "policyRule": {
+        "if": {
+            "anyOf": [
+                {
+                    "not": {
+                        "field": "type",
+                        "in": "[parameters('allowedServices')]"
+                    }
+                },
+                {
+                    "not": {
+                        "field": "location",
+                        "in": "[parameters('allowedLocations')]"
+                    }
+                }
+            ]
+        },
+        "then": {
+            "effect": "deny"
+        }
+    },
+    "parameters_values": {
+        "allowedLocations": {
+            "value": [
+                "{RGLocation}"
+            ]
+        },
+        "allowedServices": {
+            "value": [
+                "Microsoft.MachineLearning/workspaces"
+            ]
+        }
+    }
+}
