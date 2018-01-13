@@ -6,6 +6,10 @@
             "defaultValue": "ml-lab",
             "type": "string"
         },
+        "location": {
+            "defaultValue": "southcentralus",
+            "type": "string"
+        },
         "newStorageAccountTier": {
             "defaultValue": "Standard_LRS",
             "type": "string"
@@ -41,13 +45,14 @@
     },
     "variables": {
         "name": "[concat(parameters('name'), '-', uniqueString(resourceGroup().id))]",
-        "newStorageAccountName": "[variables('name')]"
+        "newStorageAccountName": "[replace(variables('name'), '-', '')]",
+        "newStorageAccountId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Storage/storageAccounts/', variables('newStorageAccountName'))]"
     },
     "resources": [
         {
             "apiVersion": "[parameters('workspaceApiVersion')]",
             "name": "[variables('name')]",
-            "location": "resourceGroup().location]",
+            "location": "[parameters('location')]",
             "type": "Microsoft.MachineLearning/workspaces",
             "properties": {
                 "userStorageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountName'))]"
@@ -59,7 +64,7 @@
         {
             "apiVersion": "[parameters('storageApiVersion')]",
             "name": "[variables('newStorageAccountName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "[parameters('newStorageAccountTier')]"
@@ -70,7 +75,7 @@
             "apiVersion": "[parameters('commitmentPlanApiVersion')]",
             "name": "[parameters('planName')]",
             "type": "Microsoft.MachineLearning/commitmentPlans",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "sku": {
                 "name": "[parameters('skuName')]",
                 "tier": "[parameters('skuTier')]",
