@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "defaultValue": "ml-lab",
+            "type": "string"
+        },
+        "newStorageAccountTier": {
+            "defaultValue": "Standard_LRS",
+            "type": "string"
+        },
+        "planName": {
+            "defaultValue": "mlPlan",
+            "type": "string"
+        },
+        "skuName": {
+            "defaultValue": "DevTest",
+            "type": "string"
+        },
+        "skuTier": {
+            "defaultValue": "Standard",
+            "type": "string"
+        },
+        "skuCapacity": {
+            "defaultValue": 1,
+            "type": "int"
+        },
+        "workspaceApiVersion": {
+            "defaultValue": "2016-04-01",
+            "type": "string"
+        },
+        "commitmentPlanApiVersion": {
+            "defaultValue": "2016-05-01-preview",
+            "type": "string"
+        },
+        "storageApiVersion": {
+            "defaultValue": "2016-01-01",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "name": "[concat(parameters('name'), '-', uniqueString(resourceGroup().id))]",
+        "newStorageAccountName": "[variables('name')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[parameters('workspaceApiVersion')]",
+            "name": "[variables('name')]",
+            "location": "resourceGroup().location]",
+            "type": "Microsoft.MachineLearning/workspaces",
+            "properties": {
+                "userStorageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountName'))]"
+            },
+            "dependsOn": [
+                "[variables('newStorageAccountName')]"
+            ]
+        },
+        {
+            "apiVersion": "[parameters('storageApiVersion')]",
+            "name": "[variables('newStorageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "[parameters('newStorageAccountTier')]"
+            },
+            "kind": "Storage"
+        },
+        {
+            "apiVersion": "[parameters('commitmentPlanApiVersion')]",
+            "name": "[parameters('planName')]",
+            "type": "Microsoft.MachineLearning/commitmentPlans",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "[parameters('skuTier')]",
+                "capacity": "[parameters('skuCapacity')]"
+            },
+            "properties": {}
+        }
+    ]
+}
