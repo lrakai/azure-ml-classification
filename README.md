@@ -1,4 +1,4 @@
-# azure-ml-regression
+# azure-ml-classification
 Demonstration showing how to use Azure Machine Learning Studio to predict income levels
 
 # Acknowledgements
