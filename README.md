@@ -19,7 +19,13 @@ Alternatively, you can perform a one-click deploy with the following button:
 </a>
 
 ## Following Along
-
+1. Navigate to the Azure Machine Learning workspace created by the ARM template and click the link to open Azure Machine Learning Studio
+1. Create a new Experiment
+1. Build the following model in the designer:
+![image](https://user-images.githubusercontent.com/3911650/35004233-836ec1a2-faac-11e7-819c-3da16424f759.png)
+1. In the Select Columns for Dataset module properties, remove a subset of features from the dataset so you can see how important they are compared to the model that is trained with all features
+1. Run the experiment
+1. Compare the model performance by selecting the Evaluate Model's visualize option
 
 ## Tearing Down
 When finished, remove the Azure resources with:
